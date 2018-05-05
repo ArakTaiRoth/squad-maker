@@ -45,12 +45,15 @@ class AppController extends Controller
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
+        $this->loadComponent('Csrf', ['secure' => TRUE]);
+        $this->loadComponent('Security', ['blackHoleCallback' => 'forceSSL']);
+        $this->loadComponent('Cookie', [
+            'secure' => TRUE,
+            'httpOnly' => TRUE
+        ]);
+    }
 
-        /*
-         * Enable the following components for recommended CakePHP security settings.
-         * see https://book.cakephp.org/3.0/en/controllers/components/security.html
-         */
-        //$this->loadComponent('Security');
-        //$this->loadComponent('Csrf');
+    public function forceSSL() {
+        return $this->redirect('https://' . env('SERVER_NAME') . $this->request->here);
     }
 }
