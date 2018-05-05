@@ -1,0 +1,30 @@
+version: '2'
+services:
+  db:
+    build: ./mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: -7#TVR*4CR7N=L_&t-tRuFAL$AEB_X
+      MYSQL_DATABASE: squadMaker
+      MYSQL_USER: squadMaker
+      MYSQL_PASSWORD: '8R3vhnW@X_#FGu&?assS6%=g_QGx5Z'
+    restart: always
+    ports:
+      - '3306:3306'
+    volumes:
+      - my-datavolume:/var/lib/mysql
+  cache:
+    build: ./cache
+    restart: always
+  php:
+    build: ./php
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ../squadMaker:/squadMaker
+    command: bash -c "service crond start; httpd -D FOREGROUND"
+    links:
+      - "db:RDS_HOSTNAME"
+      - "cache:CACHE_HOSTNAME"
+volumes:
+  my-datavolume:
