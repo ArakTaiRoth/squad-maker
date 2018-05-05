@@ -12,18 +12,80 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 
--- Dumping database structure for stockers_main
-CREATE DATABASE IF NOT EXISTS `squadMaker` /*!40100 DEFAULT CHARACTER SET utf8 */;
+-- Dumping database structure for squadMaker
+DROP DATABASE IF EXISTS `squadMaker`;
+CREATE DATABASE IF NOT EXISTS `squadMaker` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE `squadMaker`;
 
-CREATE TABLE `sessions` (
+-- Dumping structure for table squadMaker.players
+DROP TABLE IF EXISTS `players`;
+CREATE TABLE IF NOT EXISTS `players` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `firstName` varchar(50) NOT NULL,
+  `lastName` varchar(50) NOT NULL,
+  `shooting` int(2) unsigned NOT NULL COMMENT 'A player''s shooting skill',
+  `skating` int(2) unsigned NOT NULL COMMENT 'A player''s skating skill',
+  `checking` int(2) unsigned NOT NULL COMMENT 'A player''s checking skill',
+  `total` int(3) unsigned NOT NULL COMMENT 'A player''s total skill value',
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `Total` (`total`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Table to hold the player data';
+
+-- Dumping data for table squadMaker.players: ~0 rows (approximately)
+DELETE FROM `players`;
+/*!40000 ALTER TABLE `players` DISABLE KEYS */;
+/*!40000 ALTER TABLE `players` ENABLE KEYS */;
+
+-- Dumping structure for table squadMaker.players_squads
+DROP TABLE IF EXISTS `players_squads`;
+CREATE TABLE IF NOT EXISTS `players_squads` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `player_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `squad_id` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `Squad` (`squad_id`),
+  KEY `FK__players` (`player_id`),
+  CONSTRAINT `FK__players` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`),
+  CONSTRAINT `FK__squads` FOREIGN KEY (`squad_id`) REFERENCES `squads` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='A simple join table to join players with the squad they are in.';
+
+-- Dumping data for table squadMaker.players_squads: ~0 rows (approximately)
+DELETE FROM `players_squads`;
+/*!40000 ALTER TABLE `players_squads` DISABLE KEYS */;
+/*!40000 ALTER TABLE `players_squads` ENABLE KEYS */;
+
+-- Dumping structure for table squadMaker.sessions
+DROP TABLE IF EXISTS `sessions`;
+CREATE TABLE IF NOT EXISTS `sessions` (
   `id` char(40) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
-  `created` datetime DEFAULT CURRENT_TIMESTAMP, -- optional, requires MySQL 5.6.5+
-  `modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- optional, requires MySQL 5.6.5+
-  `data` blob DEFAULT NULL, -- for PostgreSQL use bytea instead of blob
+  `created` datetime DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `data` blob,
   `expires` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table squadMaker.sessions: ~0 rows (approximately)
+DELETE FROM `sessions`;
+/*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
+
+-- Dumping structure for table squadMaker.squads
+DROP TABLE IF EXISTS `squads`;
+CREATE TABLE IF NOT EXISTS `squads` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL DEFAULT 'Unknown Squad',
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Table to hold all data for a squad. Currently only holds a squad name, could be grown to hold more data on a squad at a later date.';
+
+-- Dumping data for table squadMaker.squads: ~0 rows (approximately)
+DELETE FROM `squads`;
+/*!40000 ALTER TABLE `squads` DISABLE KEYS */;
+/*!40000 ALTER TABLE `squads` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
