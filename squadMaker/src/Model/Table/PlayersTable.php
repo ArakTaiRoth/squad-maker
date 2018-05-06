@@ -39,6 +39,7 @@ class PlayersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('Curl');
 
         $this->belongsToMany('Squads', [
             'foreignKey' => 'player_id',

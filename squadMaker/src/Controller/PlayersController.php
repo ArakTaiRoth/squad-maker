@@ -101,24 +101,30 @@ class PlayersController extends AppController
             $this->loadComponent('Upload');
             $this->loadComponent('Parse');
 
-            $file = $this->Upload->upload($this->request->getData('playerFile'));
+            if ($this->request->getData('playerFile') !== null) {
+                $response = $this->Upload->upload($this->request->getData('playerFile'));
 
-            if ($file['type'] !== 'error') {
-                $parsed = $this->Parse->parsePlayerJson($file['file']);
+                if ($response['type'] === 'success') {
+                    $response = $this->Parse->parsePlayerJson($response['file']);
+                }
+            } else if ($this->request->getData('api') === '1') {
+                $response = $this->Players->getResponse('players');
 
-                if ($parsed['type'] !== 'error') {
-                    $this->Flash->success($parsed['message']);
-
-                    return $this->redirect(['action' => 'index']);
-                } else {
-                    $this->Flash->error($parsed['message']);
-
-                    return $this->redirect(['action' => 'import']);
+                // Check if an error was returned from the curl request
+                if ($response['type'] === 'success') {
+                    $response = $this->Players->createPlayers($response['data']);
                 }
             } else {
-                $this->Flash->error($file['message']);
-
+                // An invalid form request was sent, reload the page
                 return $this->redirect(['action' => 'import']);
+            }
+
+            if ($response['type'] === 'success') {
+                $this->Flash->success($response['message']);
+
+                $this->setAction('index');
+            } else {
+                $this->Flash->error($response['message']);
             }
         }
     }
