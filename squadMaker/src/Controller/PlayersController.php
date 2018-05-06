@@ -20,7 +20,7 @@ class PlayersController extends AppController
      */
     public function index()
     {
-        $players = $this->paginate($this->Players);
+        $players = $this->Players->getPlayers();
 
         $this->set(compact('players'));
     }
