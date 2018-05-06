@@ -26,22 +26,6 @@ class PlayersController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Player id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $player = $this->Players->get($id, [
-            'contain' => ['Squads']
-        ]);
-
-        $this->set('player', $player);
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
@@ -105,5 +89,37 @@ class PlayersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Import method
+     *
+     * @return \Cake\Http\Response|null Redirects to dashboard on successfull import, renders view otherwise
+     */
+    public function import() {
+        if ($this->request->is('post')) {
+            $this->loadComponent('Upload');
+            $this->loadComponent('Parse');
+
+            $file = $this->Upload->upload($this->request->getData('playerFile'));
+
+            if ($file['type'] !== 'error') {
+                $parsed = $this->Parse->parsePlayerJson($file['file']);
+
+                if ($parsed['type'] !== 'error') {
+                    $this->Flash->success($parsed['message']);
+
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error($parsed['message']);
+
+                    return $this->redirect(['action' => 'import']);
+                }
+            } else {
+                $this->Flash->error($file['message']);
+
+                return $this->redirect(['action' => 'import']);
+            }
+        }
     }
 }

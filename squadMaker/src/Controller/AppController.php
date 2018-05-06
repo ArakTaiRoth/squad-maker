@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\Core\Configure;
 
 /**
  * Application Controller
@@ -51,6 +52,10 @@ class AppController extends Controller
             'secure' => TRUE,
             'httpOnly' => TRUE
         ]);
+
+        $formTemplates = Configure::read('FormTemplates');
+
+        $this->set(compact('formTemplates'));
     }
 
     public function forceSSL() {

@@ -93,4 +93,62 @@ class PlayersTable extends Table
 
         return $validator;
     }
+
+    /**
+     * createPlayers method
+     * Used to create a new player in the system
+     *
+     * @param $players An array of player data, including first name, last name, and an array of skills
+     *                   skills in the following order:
+     *                   0 => shooting
+     *                   1 => skating
+     *                   2 => checking
+     * @return [array] containing error or success and a message
+     */
+    public function createPlayers($players) {
+        $entities = [];
+
+        foreach ($players as $player) {
+            $firstName = $player['firstName'];
+            $lastName = $player['lastName'];
+            $shooting = $player['skills'][0]['rating'];
+            $skating = $player['skills'][1]['rating'];
+            $checking = $player['skills'][2]['rating'];
+
+            if ((!is_string($firstName) || $firstName === '') || (!is_string($lastName) || $lastName === '')) {
+                return [
+                    'type' => 'error',
+                    'message' => 'Player id ' . $player['_id'] . ' must have a first name and a last name'
+                ];
+            }
+            if (!is_int($shooting) || !is_int($skating) || !is_int($checking)) {
+                return [
+                    'type' => 'error',
+                    'message' => 'Skills must be an integer, for player id ' . $player['_id']
+                ];
+            }
+
+            $total = $shooting + $skating + $checking;
+
+            $entities[] = $this->newEntity([
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+                'shooting' => $shooting,
+                'skating' => $skating,
+                'checking' => $checking,
+                'total' => $total
+            ]);
+        }
+
+        if ($this->saveMany($entities)) {
+            return [
+                'type' => 'success',
+                'message' => 'All players successfully imported'];
+        } else {
+            return [
+                'type' => 'error',
+                'message' => 'Unable to import players'
+            ];
+        }
+    }
 }
