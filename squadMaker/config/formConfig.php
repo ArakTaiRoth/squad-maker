@@ -2,6 +2,9 @@
 return [
     'FormTemplates' => [
         'default' => [
+            'inputContainer' => '<div class="form-group">{{content}}</div>',
+            'input' => '<input type="{{type}}" name="{{name}}" class="form-control"{{attrs}} />',
+            'label' => '<label{{attrs}}>{{text}}</label>',
             'button' => '<button type="{{type}}" class="btn btn-primary my-2">{{text}}</button>',
         ],
         'file' => [

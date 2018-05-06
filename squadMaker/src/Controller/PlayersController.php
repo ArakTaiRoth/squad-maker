@@ -55,20 +55,23 @@ class PlayersController extends AppController
      */
     public function edit($id = null)
     {
-        $player = $this->Players->get($id, [
-            'contain' => ['Squads']
-        ]);
+        $player = $this->Players->get($id);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $player = $this->Players->patchEntity($player, $this->request->getData());
+            $player->total = $player->shooting + $player->skating + $player->checking;
+            $name = $player->firstName . ' ' . $player->lastName;
+
             if ($this->Players->save($player)) {
-                $this->Flash->success(__('The player has been saved.'));
+                $this->Flash->success("$name has been edited.");
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The player could not be saved. Please, try again.'));
+
+            $this->Flash->error("$name could not be edited.");
         }
-        $squads = $this->Players->Squads->find('list', ['limit' => 200]);
-        $this->set(compact('player', 'squads'));
+
+        $this->set(compact('player'));
     }
 
     /**
@@ -80,12 +83,13 @@ class PlayersController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
         $player = $this->Players->get($id);
+        $name = $player->firstName . ' ' . $player->lastName;
+
         if ($this->Players->delete($player)) {
-            $this->Flash->success(__('The player has been deleted.'));
+            $this->Flash->success("Player $name has been deleted.");
         } else {
-            $this->Flash->error(__('The player could not be deleted. Please, try again.'));
+            $this->Flash->error("Player $name could not be deleted.");
         }
 
         return $this->redirect(['action' => 'index']);

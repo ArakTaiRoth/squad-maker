@@ -57,40 +57,31 @@ class PlayersTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->integer('id')
-            ->allowEmpty('id', 'create');
-
-        $validator
             ->scalar('firstName')
             ->maxLength('firstName', 50)
-            ->requirePresence('firstName', 'create')
+            ->requirePresence('firstName')
             ->notEmpty('firstName');
 
         $validator
             ->scalar('lastName')
             ->maxLength('lastName', 50)
-            ->requirePresence('lastName', 'create')
+            ->requirePresence('lastName')
             ->notEmpty('lastName');
 
         $validator
             ->integer('shooting')
-            ->requirePresence('shooting', 'create')
+            ->requirePresence('shooting')
             ->notEmpty('shooting');
 
         $validator
             ->integer('skating')
-            ->requirePresence('skating', 'create')
+            ->requirePresence('skating')
             ->notEmpty('skating');
 
         $validator
             ->integer('checking')
-            ->requirePresence('checking', 'create')
+            ->requirePresence('checking')
             ->notEmpty('checking');
-
-        $validator
-            ->integer('total')
-            ->requirePresence('total', 'create')
-            ->notEmpty('total');
 
         return $validator;
     }
