@@ -24,7 +24,7 @@
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
-    <?= $this->Html->css(['fontawesome-all.min', 'sb-admin', 'datatables']); ?>
+    <?= $this->Html->css(['fontawesome-all.min', 'sb-admin']); ?>
 </head>
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav" role="navigation">
@@ -35,10 +35,15 @@
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav navbar-sidenav" id="accordion">
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-                    <i class="fas fa-dashboard"></i>
                     <a class="nav-link" href="/">
                         <i class="fas fa-tachometer-alt"></i>
                         <span class="nav-link-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Squads">
+                    <a class="nav-link" href="/squads">
+                        <i class="fas fa-users"></i>
+                        <span class="nav-link-text">Squads</span>
                     </a>
                 </li>
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Players">

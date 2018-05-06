@@ -5,6 +5,29 @@
  */
 ?>
 <div class="card">
+    <div class="card-header">Create Squads</div>
+    <div class="card-body">
+        <?php
+            $this->Form->setTemplates($formTemplates['default']);
+
+            echo $this->Form->create(false, [
+                'url' => ['controller' => 'Squads', 'action' => 'create']
+            ]);
+
+            echo $this->Form->control('squadCount', [
+                'label' => '# of Squads',
+                'type' => 'text'
+            ]);
+
+            echo $this->Form->button('Create Squads', [
+                'type' => 'submit'
+            ]);
+
+            echo $this->Form->end();
+        ?>
+    </div>
+</div>
+<div class="card my-2">
     <div class="card-header">Waiting List</div>
     <div class="card-body">
         <table id="players" class="table table-striped">
