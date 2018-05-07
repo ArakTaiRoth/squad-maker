@@ -107,4 +107,14 @@ class SquadsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function reset() {
+        if ($this->Squads->deleteAll([1 => 1])) {
+            $this->Flash->success('All squads have been reset');
+        } else {
+            $this->Flash->error('There was an error resetting the squads');
+        }
+
+        return $this->redirect(['controller' => 'Players', 'action' => 'index']);
+    }
 }
