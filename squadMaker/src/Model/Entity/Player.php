@@ -35,6 +35,7 @@ class Player extends Entity
         'lastName' => true,
         'shooting' => true,
         'skating' => true,
-        'checking' => true
+        'checking' => true,
+        'total' => true
     ];
 }
