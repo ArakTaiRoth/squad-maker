@@ -44,7 +44,6 @@
                     <th>Shooting</th>
                     <th>Skating</th>
                     <th>Checking</th>
-                    <th>Total</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -56,7 +55,6 @@
                         <td><?= $player->shooting; ?></td>
                         <td><?= $player->skating; ?></td>
                         <td><?= $player->checking; ?></td>
-                        <td><?= $player->total; ?></td>
                         <td class="text-center"><a href="/players/edit/<?= $player->id; ?>"><i class="fas fa-edit"></i></a></td>
                         <td class="text-center"><a href="/players/delete/<?= $player->id; ?>"><i class="fas fa-ban"></i></a></td>
                     </td>
@@ -68,7 +66,6 @@
                     <th>Shooting</th>
                     <th>Skating</th>
                     <th>Checking</th>
-                    <th>Total</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>

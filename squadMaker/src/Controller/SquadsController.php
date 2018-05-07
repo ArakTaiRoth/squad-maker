@@ -20,7 +20,7 @@ class SquadsController extends AppController
      */
     public function index()
     {
-        $squads = $this->paginate($this->Squads);
+        $squads = $this->Squads->getSquads();
 
         $this->set(compact('squads'));
     }

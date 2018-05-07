@@ -58,6 +58,16 @@ class SquadsTable extends Table
     }
 
     /**
+     * getSquads
+     * A method to return al squads as well as the players associated with them
+     *
+     * @return App\Model\Entity\Squad[] An array of squad objects containing the squad info as well as associated Player objects
+     */
+    public function getSquads() {
+        return $this->find()->contain(['Players'])->all();
+    }
+
+    /**
      * createSquads
      * Method to create a group of squads based off of the # of squads requested and the # of players available
      *
@@ -163,7 +173,7 @@ class SquadsTable extends Table
      * @return object An object holding the average of each of the three skills
      */
     public function calculateSkillAverages($players, $playerCount) {
-        // Calculate average of the three skills with all players
+        // Calculate the global average of the three skills with all players
         $averages = (object) [
             'shooting' => 0,
             'skating' => 0,
@@ -175,6 +185,7 @@ class SquadsTable extends Table
             $averages->skating += $player->skating;
             $averages->checking += $player->checking;
         }
+
         $averages->shooting = (int) ($averages->shooting / $playerCount);
         $averages->skating = (int) ($averages->skating / $playerCount);
         $averages->checking = (int) ($averages->checking / $playerCount);
@@ -197,10 +208,12 @@ class SquadsTable extends Table
      */
     public function placePlayerInSquad($averages, $skills, $players, $playersAdded, $range = 5) {
         foreach ($players as $key => $player) {
+            // Calculate the new average for each skill for the squad with the new potential player
             $shooting = (int) (($skills->shooting + $player->shooting) / ($playersAdded + 1));
             $skating = (int) (($skills->skating + $player->skating) / ($playersAdded + 1));
             $checking = (int) (($skills->checking + $player->checking) / ($playersAdded + 1));
 
+            // Check if each average skill value falls within a desired range
             $shooting = filter_var($shooting, FILTER_VALIDATE_INT, [
                 'options' => [
                     'min_range' => $averages->shooting - $range,
@@ -221,6 +234,7 @@ class SquadsTable extends Table
             ]);
 
             if ($shooting && $skating && $checking) {
+                // Return the key of the player that makes the squad stay within the given parameters
                 return $key;
             }
         }
