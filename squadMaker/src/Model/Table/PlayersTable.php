@@ -89,14 +89,12 @@ class PlayersTable extends Table
     /**
      * getPlayers
      * Used to grab all the players from the database
-     * Sorts them by total skill score initially
      *
      * @return App\Model\Entity\Player[] An array of Player entities
      */
     public function getPlayers() {
         return $this->find()
-            ->order(['total' => 'ASC'])
-            ->all();
+            ->toArray();
     }
 
     /**

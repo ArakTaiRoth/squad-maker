@@ -27,8 +27,6 @@ class Squad extends Entity
      */
     protected $_accessible = [
         'name' => true,
-        'created' => true,
-        'modified' => true,
         'players' => true
     ];
 }

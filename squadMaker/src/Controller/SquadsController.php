@@ -48,18 +48,19 @@ class SquadsController extends AppController
      */
     public function add()
     {
-        $squad = $this->Squads->newEntity();
         if ($this->request->is('post')) {
-            $squad = $this->Squads->patchEntity($squad, $this->request->getData());
-            if ($this->Squads->save($squad)) {
-                $this->Flash->success(__('The squad has been saved.'));
+            $response = $this->Squads->createSquads($this->request->getData('squadCount'));
 
-                return $this->redirect(['action' => 'index']);
+            if ($response['type'] === 'success') {
+                $this->Flash->success($response['message']);
+
+                $this->setAction('index');
+            } else {
+                $this->Flash->error($response['message']);
             }
-            $this->Flash->error(__('The squad could not be saved. Please, try again.'));
+        } else {
+            return $this->redirect(['controller' => 'Players', 'action' => 'index']);
         }
-        $players = $this->Squads->Players->find('list', ['limit' => 200]);
-        $this->set(compact('squad', 'players'));
     }
 
     /**

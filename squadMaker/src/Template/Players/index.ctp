@@ -11,7 +11,7 @@
             $this->Form->setTemplates($formTemplates['default']);
 
             echo $this->Form->create(false, [
-                'url' => ['controller' => 'Squads', 'action' => 'create']
+                'url' => ['controller' => 'Squads', 'action' => 'add']
             ]);
 
             echo $this->Form->control('squadCount', [
