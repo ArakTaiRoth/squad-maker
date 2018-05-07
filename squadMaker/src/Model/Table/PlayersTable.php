@@ -93,8 +93,16 @@ class PlayersTable extends Table
      * @return App\Model\Entity\Player[] An array of Player entities
      */
     public function getPlayers() {
-        return $this->find()
-            ->toArray();
+        $query = $this->find();
+        $query->join([
+            'table' => 'players_squads',
+            'alias' => 'ps',
+            'type' => 'LEFT',
+            'conditions' => 'ps.player_id = Players.id'
+        ])
+        ->where('ps.id IS NULL');
+
+        return $query->toArray();
     }
 
     /**
