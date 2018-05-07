@@ -33,17 +33,22 @@ class PlayersController extends AppController
     public function add()
     {
         $player = $this->Players->newEntity();
+
         if ($this->request->is('post')) {
             $player = $this->Players->patchEntity($player, $this->request->getData());
+            $player->total = $player->shooting + $player->skating + $player->checking;
+            $name = $player->firstName . ' ' . $player->lastName;
+
             if ($this->Players->save($player)) {
-                $this->Flash->success(__('The player has been saved.'));
+                $this->Flash->success("$name has been created.");
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The player could not be saved. Please, try again.'));
+
+            $this->Flash->error("$name could not be created");
         }
-        $squads = $this->Players->Squads->find('list', ['limit' => 200]);
-        $this->set(compact('player', 'squads'));
+
+        $this->set(compact('player'));
     }
 
     /**
