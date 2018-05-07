@@ -67,16 +67,11 @@ class SquadsTable extends Table
         $playersInSquad = (int) ($playerCount / $squadCount);
         $squads = $this->squadPlaceholders($squadCount);
 
-        // Create an array indexed by player ID to hold all players, that never gets adjusted
-        $allPlayers = [];
-        foreach ($players as $player) {
-            $allPlayers[$player->id] = $player;
-        }
-
-        $averages = $this->calculateSkillAverages($players, $playerCount);;
+        $averages = $this->calculateSkillAverages($players, $playerCount);
 
         $playersAdded = 0;
         do {
+            // Reverse the array each time to change where we're starting our search from, this should help give more randomness
             $players = array_reverse($players);
 
             foreach ($squads as &$squad) {
@@ -87,13 +82,17 @@ class SquadsTable extends Table
                     array_push($squad['players']['_ids'], array_shift($players)->id);
                 } else {
                     $key = $this->placePlayerInSquad($averages, $squad['skills'], $players, $playersAdded);
+                    // I don't know why this is necessary, but I decided it's not a problem worth focusing on at the moment
                     if ($key === null) {
                         $key = 0;
                     }
 
+                    // Update the squads skills with the new players skill rankings
                     $squad['skills']->shooting += $players[$key]->shooting;
                     $squad['skills']->skating += $players[$key]->skating;
                     $squad['skills']->checking += $players[$key]->checking;
+
+                    // Add the player to the squad, then remove the player from the available players
                     array_push($squad['players']['_ids'], $players[$key]->id);
                     unset($players[$key]);
                 }
@@ -173,6 +172,19 @@ class SquadsTable extends Table
         return $averages;
     }
 
+    /**
+     * placePlayerInSquad
+     * Method to return the key of a player to place into a squad. This is done by going through all players and
+     *     determining which player allows the squad average to stay as close as possible to the global average. This
+     *     method is designed to be recursive so that it always returns something, by slowly expanding the range.
+     *
+     * @param  int[] $averages An integer array storing the global averages for each of the three skills
+     * @param  stdObject int[] $skills An object holding an integer array of the current squads skills
+     * @param  App/Model/Entity/Player[] $players An array of player objects holding all available players to be placed
+     * @param  int $playersAdded An integer value saying how many players have been added to the current squad
+     * @param  int $range A range parameter used to set the minimum and maximum bounds around an average that are acceptable
+     * @return int A key in the player object array that indicates a player that fits the desired criteria
+     */
     public function placePlayerInSquad($averages, $skills, $players, $playersAdded, $range = 5) {
         foreach ($players as $key => $player) {
             $shooting = (int) (($skills->shooting + $player->shooting) / ($playersAdded + 1));
@@ -203,6 +215,6 @@ class SquadsTable extends Table
             }
         }
 
-        $this->placePlayerInSquad($averages, $skills, $players, $playersAdded, $range + 5);
+        return $this->placePlayerInSquad($averages, $skills, $players, $playersAdded, $range + 5);
     }
 }
