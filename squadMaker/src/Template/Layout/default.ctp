@@ -40,12 +40,14 @@
                         <span class="nav-link-text">Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Squads">
-                    <a class="nav-link" href="/squads">
-                        <i class="fas fa-users"></i>
-                        <span class="nav-link-text">Squads</span>
-                    </a>
-                </li>
+                <?php if ($squadCount > 0): ?>
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Squads">
+                        <a class="nav-link" href="/squads">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-link-text">Squads</span>
+                        </a>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Players">
                     <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapsePlayers" data-parent="#accordion" aria-expanded="false">
                         <i class="fas fa-portrait"></i>

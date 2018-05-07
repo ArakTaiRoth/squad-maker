@@ -58,6 +58,27 @@ class AppController extends Controller
         $this->set(compact('formTemplates'));
     }
 
+    /**
+     * beforeFilter
+     * A CakePHP magic function. In the AppController, this runs before any page is loaded, and does the included operation
+     *     for every single page load.
+     *
+     * @param  Event  $event Data for the action requested
+     */
+    public function beforeFilter(Event $event) {
+        $this->loadModel('Squads');
+
+        $squadCount = $this->Squads->getSquadCount();
+
+        $this->set(compact('squadCount'));
+    }
+
+    /**
+     * forceSSL
+     * This function forces SSL on every page, if an HTTP request is made, this redirects the user to the same page but with SSL
+     *
+     * @return New header with a location redirect to the same page but https
+     */
     public function forceSSL() {
         return $this->redirect('https://' . env('SERVER_NAME') . $this->request->getAttribute('here'));
     }
