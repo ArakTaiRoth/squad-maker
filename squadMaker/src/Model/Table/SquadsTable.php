@@ -48,6 +48,16 @@ class SquadsTable extends Table
     }
 
     /**
+     * getSquadCount
+     * A method to return the # of squads currently in the database
+     *
+     * @return int A count of all the current squads
+     */
+    public function getSquadCount() {
+        return $this->find()->all()->count();
+    }
+
+    /**
      * createSquads
      * Method to create a group of squads based off of the # of squads requested and the # of players available
      *

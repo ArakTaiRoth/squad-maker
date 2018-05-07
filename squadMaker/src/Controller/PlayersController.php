@@ -21,8 +21,9 @@ class PlayersController extends AppController
     public function index()
     {
         $players = $this->Players->getPlayers();
+        $squadCount = $this->Players->Squads->getSquadCount();
 
-        $this->set(compact('players'));
+        $this->set(compact('players', 'squadCount'));
     }
 
     /**
