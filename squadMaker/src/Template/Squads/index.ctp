@@ -8,7 +8,10 @@
     <?php foreach ($squads as $squad): ?>
         <div class="col my-2">
             <div class="card">
-                <div class="card-header"><?= $squad->name; ?></div>
+                <div class="card-header">
+                    <?= $squad->name; ?>
+                    <a href="/squads/edit/<?= $squad->id; ?>" class='ml-2'><i class="fas fa-edit"></i></a>
+                </div>
                 <div class="card-body">
                     <table class="squad table table-striped">
                         <thead>

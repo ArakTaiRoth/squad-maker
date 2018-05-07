@@ -72,20 +72,22 @@ class SquadsController extends AppController
      */
     public function edit($id = null)
     {
-        $squad = $this->Squads->get($id, [
-            'contain' => ['Players']
-        ]);
+        $squad = $this->Squads->get($id);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $squad = $this->Squads->patchEntity($squad, $this->request->getData());
+            $name = $squad->name;
+
             if ($this->Squads->save($squad)) {
-                $this->Flash->success(__('The squad has been saved.'));
+                $this->Flash->success("$name has been edited");
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The squad could not be saved. Please, try again.'));
+
+            $this->Flash->error("$name could not be edited");
         }
-        $players = $this->Squads->Players->find('list', ['limit' => 200]);
-        $this->set(compact('squad', 'players'));
+
+        $this->set(compact('squad'));
     }
 
     /**
